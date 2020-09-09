@@ -75,6 +75,8 @@ def main():
 <!doctype html>
 <html>
   <head>
+    <title>"""+a_dir_name.replace('_', ' ').title()+"""</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../style.css">
   </head>
   <body>
@@ -125,6 +127,13 @@ a:visited { color: #2aa198; }
 a:hover { color: #209090; }
 a:active { color: #209090; }
 
+/** Theme-specific stuff, we repeat the light style for old devices which error on @media queries */
+
+html, body {
+  background: #fdf6e3;
+  color: #586e75;
+}
+
 @media (prefers-color-scheme: light) {
   html, body {
     background: #fdf6e3;
@@ -148,6 +157,8 @@ a:active { color: #209090; }
 <!doctype html>
 <html>
   <head>
+    <title>Jeffrey McAteer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
     <style>
 html {
@@ -157,17 +168,20 @@ html {
   background-clip: padding-box;
 
   padding: 0;
+  padding-top: 24vh;
   padding-top: max(98pt, 24vh);
 }
 img#profile {
   max-width: 128pt;
   position: absolute;
+  top: 2pt;
   top: max(2pt, calc(24vh - 96pt));
   left: 24pt;
   border-radius: 3pt;
 }
 h1#name {
-  padding-top: 38pt;
+  padding-top: 68pt;
+  padding-top: min(38pt, 38pt); /* old browsers which cannot do a min() will use the first value */
 }
     </style>
   </head>
