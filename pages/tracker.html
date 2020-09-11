@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <h1>Tracker</h1>
+    <p>
+      This page runs javascript code that asks for your position every 60 seconds.
+      That position is appended to a shared google storage file which
+      is used to render positions on the map below:
+    </p>
+    <button onclick="clear_data();">Clear Data</button>
+
+    <div id="map"></div>
+
+<style>
+html, body {
+  padding: 0;
+  margin: 0;
+}
+h1, h2, p, em {
+  padding: 3pt 12pt;
+}
+div#map {
+  width: 100%;
+  width: max(100%, 100vw);
+  height: 600pt;
+  height: 76vh;
+}
+@media only screen and (max-device-width : 640px) {
+  div#map {
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 90%;
+    min-height: 90%;
+    height: 100pt;
+  }
+}
+</style>
+    <script>
+var DARK_MAP_STYLE = [
+  {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+  {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+  {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+  {
+    featureType: 'administrative.locality',
+    elementType: 'labels.text.fill',
+    stylers: [{color: '#d59563'}]
+  },
+  {
+    featureType: 'poi',
+    elementType: 'labels.text.fill',
+    stylers: [{color: '#d59563'}]
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'geometry',
+    stylers: [{color: '#263c3f'}]
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'labels.text.fill',
+    stylers: [{color: '#6b9a76'}]
+  },
+  {
+    featureType: 'road',
+    elementType: 'geometry',
+    stylers: [{color: '#38414e'}]
+  },
+  {
+    featureType: 'road',
+    elementType: 'geometry.stroke',
+    stylers: [{color: '#212a37'}]
+  },
+  {
+    featureType: 'road',
+    elementType: 'labels.text.fill',
+    stylers: [{color: '#9ca5b3'}]
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry',
+    stylers: [{color: '#746855'}]
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry.stroke',
+    stylers: [{color: '#1f2835'}]
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'labels.text.fill',
+    stylers: [{color: '#f3d19c'}]
+  },
+  {
+    featureType: 'transit',
+    elementType: 'geometry',
+    stylers: [{color: '#2f3948'}]
+  },
+  {
+    featureType: 'transit.station',
+    elementType: 'labels.text.fill',
+    stylers: [{color: '#d59563'}]
+  },
+  {
+    featureType: 'water',
+    elementType: 'geometry',
+    stylers: [{color: '#17263c'}]
+  },
+  {
+    featureType: 'water',
+    elementType: 'labels.text.fill',
+    stylers: [{color: '#515c6d'}]
+  },
+  {
+    featureType: 'water',
+    elementType: 'labels.text.stroke',
+    stylers: [{color: '#17263c'}]
+  }
+];
+
+var T_POSITIONS_URL = "https://storage.googleapis.com/public.jmcateer.pw/tracker-positions.csv";
+var MAX_POS_LINES = 18;
+
+function do_http_get(url, callback) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+          callback(xhr.responseText);
+      }
+  }
+  xhr.open('GET', url);
+  xhr.send();
+}
+function initMap() {
+  var coords = {lat: 38.3355029, lng: -77.5733936};
+  
+  // See https://developers.google.com/maps/documentation/javascript/reference/map#MapOptions
+  window.map = new google.maps.Map(
+    document.getElementById('map'),
+    {
+      zoom: 8,
+      center: coords,
+      clickableIcons: false,
+      disableDefaultUI: true,
+      fullscreenControl: true,
+      gestureHandling: 'greedy',
+      styles: DARK_MAP_STYLE
+    }
+  );
+  
+  window.our_marker = new google.maps.Marker({position: coords, map: window.map});
+
+}
+
+function on_new_pos(lat, lon) {
+  window.our_last_lat = lat;
+  window.our_last_lon = lon;
+  var ll = new google.maps.LatLng(lat, lon);
+  window.our_marker.setPosition(ll);
+  if (window.our_label) {
+    window.our_marker.setLabel(window.our_label);
+  }
+  window.map.panTo(ll);
+}
+
+function on_new_position_list(position_list) {
+  window.last_full_position_list = position_list;
+  console.log('all positions: ', position_list);
+  var lines = position_list.match(/[^\r\n]+/g);
+  if (!lines) {
+    return;
+  }
+
+  lines.forEach(function (line) {
+    if (line) {
+      var parts = line.trim().split(',');
+      var name = parts[0];
+      var lat = parseFloat(parts[1]);
+      var lon = parseFloat(parts[2]);
+      // Create/update icon
+      if (name != window.our_label) {
+        // do we have an icon?
+        if (!(name in window.foreign_markers)) {
+          window.foreign_markers[name] = new google.maps.Marker({position: {lat: lat, lng: lon}, map: window.map});
+        }
+        var ll = new google.maps.LatLng(lat, lon);
+        window.foreign_markers[name].setPosition(ll);
+        window.foreign_markers[name].setLabel(name);
+      }
+    }
+  });
+}
+
+function clear_data() {
+  localStorage.removeItem('our_label');
+}
+
+function main() {
+  // d/l list of positions...
+  do_http_get(T_POSITIONS_URL+'?c='+Math.random(), function(response_body) {
+    on_new_position_list(response_body);
+  });
+
+  // ask for position...
+  if (!window.watching_pos) {
+    navigator.geolocation.watchPosition(
+      function (position) {
+        on_new_pos(position.coords.latitude, position.coords.longitude);
+      },
+      function (err) {
+        console.log('position permission deined', err);
+        window.watching_pos = false;
+      }
+    );
+    window.watching_pos = true;
+  }
+
+  // Ask for name if no name...
+  if (!window.our_label) {
+    // Check localstorage
+    window.our_label = localStorage.getItem('our_label');
+    if (!window.our_label) {
+      // ask user
+      window.our_label = prompt("what is your label?", '');
+      localStorage.setItem('our_label', window.our_label);
+    }
+  }
+
+  // upload position after a 1 second delay to allow
+  // navigator.geolocation.watchPosition to fire
+  // https://stackoverflow.com/questions/5587973/javascript-upload-file
+  setTimeout(function() {
+    if (window.our_last_lat < -360.0 || window.our_last_lat > 360.0) {
+      return; // do not process invlaid data
+    }
+    var new_line = window.our_label+','+window.our_last_lat+','+window.our_last_lon+'\n';
+
+    window.last_full_position_list += new_line;
+    var lines = window.last_full_position_list.split('\n');
+    while (lines.length > MAX_POS_LINES) {
+      lines.splice(0,1); // remove first line
+    }
+    var curr_lines = lines.join('\n');
+    console.log('curr_lines=', curr_lines);
+
+    // Upload curr_lines
+    var req = new XMLHttpRequest();
+    req.open("POST", T_POSITIONS_URL);
+    var boundary = ''+(Math.floor((Math.random() * Math.floor(9999999)) + 1000000));
+    boundary = boundary+''+boundary;
+
+    req.setRequestHeader("Content-type","multipart/form-data; boundary="+boundary);
+    req.send('--'+boundary+'\r\nContent-Disposition: form-data; name="tracker-positions"; filename="tracker-positions.csv"\r\n\r\n'+curr_lines+"\r\n--"+boundary+"--");
+
+
+  }, 1200);
+
+  // update map
+}
+window.watching_pos = false;
+window.our_label = '';
+window.our_last_lat = -999;
+window.our_last_lon = -999;
+window.foreign_markers = {};
+setTimeout(main, 400);
+setInterval(main, 30000);
+    </script>
+    <script defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDWXEBee6EL52JeZBRBdZNHQBcYWs3kj5g&callback=initMap">
+    </script>
+
+  </body>
+</html>

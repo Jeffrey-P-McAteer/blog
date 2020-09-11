@@ -20,6 +20,7 @@ def markdown_to_html(article_index_html, article_index_md, style_path='../style.
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8" />
     <link rel="stylesheet" href="{style_path}">
   </head>
   <body>
@@ -78,6 +79,7 @@ def main():
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8" />
     <title>"""+a_dir_name.replace('_', ' ').title()+"""</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../style.css">
@@ -97,14 +99,17 @@ def main():
 
   # For each page create a tld file
   for p_file_name in os.listdir('pages'):
+    html_f = os.path.join(www_dir, os.path.splitext(p_file_name)[0]+'.html');
     if p_file_name.endswith('.md'):
-      html_f = os.path.join(www_dir, os.path.splitext(p_file_name)[0]+'.html');
       markdown_to_html(html_f, os.path.join('pages', p_file_name), style_path='style.css')
+
+    elif p_file_name.endswith('.html'):
+      shutil.copy(os.path.join('pages', p_file_name), html_f)
 
     else:
       print("Ignoring page file {}".format(p_file_name))
 
-  # Copy some files in
+  # Copy index asset files in
   shutil.copy(
     '/j/res/profiles/background-design-code-01.jpg',
     os.path.join(www_dir, 'background-design-code-01.jpg')
@@ -184,6 +189,7 @@ html, body {
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8" />
     <title>Jeffrey McAteer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
@@ -219,6 +225,7 @@ h1#name {
       <li><a href="code_projects.html">Code Projects</a></li>
       <li><a href="music_i_enjoy.html">Music I Enjoy</a></li>
       <li><a href="anime_i_enjoy.html">Anime I Enjoy</a></li>
+      <li><a href="tracker.html">Tracker App</a></li>
     </ul>
     <h1 id="articles">Articles</h1>
 """.strip().replace('\n', '');
@@ -242,6 +249,11 @@ h1#name {
       if arg in article_names:
         ff_url = www_dir+'/'+arg+'/index.html'
         break;
+
+      for file_name in os.listdir(www_dir):
+        if file_name.startswith(arg):
+          ff_url = www_dir+'/'+file_name
+          break;
 
     subprocess.run(['firefox', ff_url])
 
