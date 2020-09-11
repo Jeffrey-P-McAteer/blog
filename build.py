@@ -4,6 +4,30 @@
 
 import os, sys, subprocess, shutil
 
+def markdown_to_html(article_index_html, article_index_md, style_path='../style.css'):
+  subprocess.run([
+  'markdown',
+    '-o', article_index_html,
+    '-html5',
+    article_index_md
+  ])
+  # Modify the generated html by adding a stylesheet..
+  article_index_html_content = ""
+  with open(article_index_html, 'r') as fd:
+    article_index_html_content = fd.read()
+
+  article_index_html_content = f"""
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="{style_path}">
+  </head>
+  <body>
+""".strip() + article_index_html_content + "</body></html>"
+
+  with open(article_index_html, 'w') as fd:
+    fd.write(article_index_html_content)
+
 def main():
   www_dir = 'www'
 
@@ -43,28 +67,7 @@ def main():
         # Create it from whatever we do have...
         article_index_md = os.path.join(article_www_dir, 'index.md')
         if os.path.exists(article_index_md):
-          subprocess.run([
-            'markdown',
-              '-o', article_index_html,
-              '-html5',
-              article_index_md
-          ])
-          # Modify the generated html by adding a stylesheet..
-          article_index_html_content = ""
-          with open(article_index_html, 'r') as fd:
-            article_index_html_content = fd.read()
-
-          article_index_html_content = """
-<!doctype html>
-<html>
-  <head>
-    <link rel="stylesheet" href="../style.css">
-  </head>
-  <body>
-""".strip() + article_index_html_content + "</body></html>"
-
-          with open(article_index_html, 'w') as fd:
-            fd.write(article_index_html_content)
+          markdown_to_html(article_index_html, article_index_md, style_path='../style.css')
 
         else:
           # Generate directory contents html file...
@@ -92,6 +95,15 @@ def main():
 
             fd.write(html)
 
+  # For each page create a tld file
+  for p_file_name in os.listdir('pages'):
+    if p_file_name.endswith('.md'):
+      html_f = os.path.join(www_dir, os.path.splitext(p_file_name)[0]+'.html');
+      markdown_to_html(html_f, os.path.join('pages', p_file_name), style_path='style.css')
+
+    else:
+      print("Ignoring page file {}".format(p_file_name))
+
   # Copy some files in
   shutil.copy(
     '/j/res/profiles/background-design-code-01.jpg',
@@ -106,13 +118,15 @@ def main():
     fd.write("""
 body {
   min-height: 60vh;
-  padding: 3pt 4pt;
-
   margin:40px auto;
   max-width: 680px;
   line-height: 1.6;
   font-size: 18px;
-  padding: 0 10px;
+  
+  padding: 2pt 9pt;
+  padding-bottom: 300pt;
+  padding-bottom: 80vh;
+
   text-align: left;
   margin: 0 8pt;
 
@@ -126,6 +140,16 @@ a:link { color: #268bd2; }
 a:visited { color: #2aa198; }
 a:hover { color: #209090; }
 a:active { color: #209090; }
+
+/** Not theme-specific, but corrections for browser defaults I dislike */
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+html, body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+} 
 
 /** Theme-specific stuff, we repeat the light style for old devices which error on @media queries */
 
@@ -188,10 +212,18 @@ h1#name {
   <body>
     <img id="profile" src="basic-noglass-bl-02-1x1-square.small.png">
     <h1 id="name">Jeffrey McAteer</h1>
+    <ul>
+      <li><a href="code_projects.html">Code Projects</a></li>
+      <li><a href="music_i_enjoy.html">Music I Enjoy</a></li>
+      <li><a href="anime_i_enjoy.html">Anime I Enjoy</a></li>
+    </ul>
+    <h1 id="articles">Articles</h1>
 """.strip().replace('\n', '');
     html += "<ul>"
     for a in article_names:
-      html += '<li><a href="{}/index.html">{}</a></li>'.format(a, a)
+      html += '<li><a href="{}/index.html">{}</a></li>'.format(
+        a, a.replace('_', ' ').title()
+      )
     html += "</ul>"
 
     html += "</body></html> \n\n<!-- Congratulations you read a comment!-->\n\n "
