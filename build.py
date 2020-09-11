@@ -140,6 +140,9 @@ a:link { color: #268bd2; }
 a:visited { color: #2aa198; }
 a:hover { color: #209090; }
 a:active { color: #209090; }
+img {
+  max-width: 680px;
+}
 
 /** Not theme-specific, but corrections for browser defaults I dislike */
 
