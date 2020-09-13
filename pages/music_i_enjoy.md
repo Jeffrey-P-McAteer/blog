@@ -16,4 +16,5 @@
   - [Lion](https://genius.com/Hearts-and-colors-lion-lyrics)
   - [Miss Calculation](https://genius.com/Elina-born-miss-calculation-lyrics)
   - [Bruises](https://genius.com/Fox-stevenson-bruises-lyrics)
+  - [Crash](https://genius.com/Neovaii-crash-lyrics)
 
