@@ -225,7 +225,7 @@ h1#name {
       <li><a href="code_projects.html">Code Projects</a></li>
       <li><a href="music_i_enjoy.html">Music I Enjoy</a></li>
       <li><a href="anime_i_enjoy.html">Anime I Enjoy</a></li>
-      <li><a href="tracker.html">Tracker App</a></li>
+      <!-- <li><a href="tracker.html">Tracker App</a></li> -->
     </ul>
     <h1 id="articles">Articles</h1>
 """.strip().replace('\n', '');
