@@ -3,6 +3,9 @@
 # yay -S discount
 
 import os, sys, subprocess, shutil
+# python3 -m pip install --user python-dateutil
+from dateutil import parser
+import time
 
 def markdown_to_html(article_index_html, article_index_md, style_path='../style.css'):
   subprocess.run([
@@ -42,6 +45,8 @@ def main():
 
   # Read all the articles...
   article_names = []
+  # map name -> article_date
+  article_dates_map = {}
   
   for a_dir_name in os.listdir('articles'):
     a_dir_path = os.path.join('articles', a_dir_name);
@@ -49,7 +54,22 @@ def main():
       
       print("Processing article {}".format(a_dir_name))
 
+      # try to get date, try "date.txt" first then use file name
+      article_date = None
+      article_date_txt = os.path.join(a_dir_path, 'date.txt');
+      if os.path.exists(article_date_txt):
+        with open(article_date_txt, 'r') as fd:
+          article_date = parser.parse( fd.read().strip() )
+      if not article_date:
+        article_date = time.ctime( os.path.getctime(a_dir_path) )
+        print("Warning: no {} found, creating...".format( article_date_txt, article_date ))
+        with open(article_date_txt, 'w') as fd:
+          fd.write('{}'.format(article_date))
+
+
       article_names.append(a_dir_name)
+      article_dates_map[a_dir_name] = article_date
+
       # Copy in to www/<article name>/
       article_www_dir = os.path.join(www_dir, a_dir_name)
 
@@ -230,9 +250,12 @@ h1#name {
     <h1 id="articles">Articles</h1>
 """.strip().replace('\n', '');
     html += "<ul>"
+    # Sort article_names by date
+    article_names = sorted(article_names, key=lambda a: article_dates_map[a], reverse=True)
     for a in article_names:
-      html += '<li><a href="{}/index.html">{}</a></li>'.format(
-        a, a.replace('_', ' ').title()
+      date = article_dates_map[a]
+      html += '<li><a href="{}/index.html">{}</a><em> ({})</em></li>'.format(
+        a, a.replace('_', ' ').title(), date.strftime('%Y-%m-%d')
       )
     html += "</ul>"
 
