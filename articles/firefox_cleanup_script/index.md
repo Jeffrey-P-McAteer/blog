@@ -41,12 +41,6 @@ if __name__ == '__main__':
   # firefox stores times in epoch nanoseconds (epoch seconds * 1 million)
   oldest_nanoseconds = int( time.mktime(last_week.timetuple()) ) * 1000000
   print(f"oldest_nanoseconds={oldest_nanoseconds}");
-  
-  # Trim moz_places table
-  r = conn.execute(f"""
-delete from moz_places where last_visit_date < {oldest_nanoseconds};
-""")
-  print(f"moz_places r.rowcount={r.rowcount}")
 
   # Remove all from moz_bookmarks_deleted
   r = conn.execute("""

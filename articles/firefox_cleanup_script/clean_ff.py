@@ -18,13 +18,6 @@ if __name__ == '__main__':
   oldest_nanoseconds = int( time.mktime(last_week.timetuple()) ) * 1000000
   print(f"oldest_nanoseconds={oldest_nanoseconds}");
   
-  # Trim moz_places table
-  # CREATE TABLE moz_places (   id INTEGER PRIMARY KEY, url LONGVARCHAR, title LONGVARCHAR, rev_host LONGVARCHAR, visit_count INTEGER DEFAULT 0, hidden INTEGER DEFAULT 0 NOT NULL, typed INTEGER DEFAULT 0 NOT NULL, frecency INTEGER DEFAULT -1 NOT NULL, last_visit_date INTEGER , guid TEXT, foreign_count INTEGER DEFAULT 0 NOT NULL, url_hash INTEGER DEFAULT 0 NOT NULL , description TEXT, preview_image_url TEXT, origin_id INTEGER REFERENCES moz_origins(id));
-  r = conn.execute(f"""
-delete from moz_places where last_visit_date < {oldest_nanoseconds};
-""")
-  print(f"moz_places r.rowcount={r.rowcount}")
-
   # Remove all from moz_bookmarks_deleted
   r = conn.execute("""
 delete from moz_bookmarks_deleted where 1=1;
@@ -44,12 +37,9 @@ delete from moz_historyvisits where visit_date < {oldest_nanoseconds};
 delete from moz_inputhistory where use_count < 4;
 """)
   print(f"moz_inputhistory r.rowcount={r.rowcount}")
-
   
   conn.commit()
   conn.close()
-
-
 
   db = f"{PROFILE}/cookies.sqlite"
   conn = sqlite3.connect(db);
