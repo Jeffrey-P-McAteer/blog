@@ -5,6 +5,7 @@
 import os, sys, subprocess, shutil
 # python3 -m pip install --user python-dateutil
 from dateutil import parser
+import datetime
 import time
 
 def markdown_to_html(article_index_html, article_index_md, style_path='../style.css'):
@@ -65,7 +66,7 @@ def main():
         print("Warning: no {} found, creating...".format( article_date_txt, article_date ))
         with open(article_date_txt, 'w') as fd:
           fd.write('{}'.format(article_date))
-
+        article_date = parser.parse('{}'.format(article_date))
 
       article_names.append(a_dir_name)
       article_dates_map[a_dir_name] = article_date
@@ -161,6 +162,10 @@ h1, h2, h3, p {
   margin: 2pt 0;
   line-height:1.2;
 }
+p {
+  margin: 16pt 0;
+  /* text-indent: 1em; TODO */
+}
 a:link { color: #268bd2; }
 a:visited { color: #2aa198; }
 a:hover { color: #209090; }
@@ -177,7 +182,7 @@ html::-webkit-scrollbar, body::-webkit-scrollbar {
 html, body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
-} 
+}
 
 /** Theme-specific stuff, we repeat the light style for old devices which error on @media queries */
 
@@ -199,6 +204,13 @@ html, body {
     color: #586e75;
   }
 }
+
+/** 3rd party style/integration stuff (not relevant for all pages) */
+div#ace_editor {
+  min-width: 620px;
+  min-height: 380px;
+}
+.ace_scrollbar { display: none !important; }
 
 """.strip()
     )
@@ -274,7 +286,7 @@ h1#name {
         break;
 
       for file_name in os.listdir(www_dir):
-        if file_name.startswith(arg):
+        if file_name.startswith(arg) and not arg == 'firefox':
           ff_url = www_dir+'/'+file_name
           break;
 
