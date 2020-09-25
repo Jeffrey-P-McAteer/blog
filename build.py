@@ -138,13 +138,15 @@ def main():
       print("Ignoring page file {}".format(p_file_name))
 
   # Copy index asset files in
+
   shutil.copy(
     '/j/res/profiles/background-design-code-01.jpg',
     os.path.join(www_dir, 'background-design-code-01.jpg')
   )
+  # convert /j/res/profiles/basic-noglass-bl-02-1x1-square.small.png -resize 320x320 /j/res/profiles/basic-noglass-bl-02-1x1-square.small.jpg
   shutil.copy(
-    '/j/res/profiles/basic-noglass-bl-02-1x1-square.small.png',
-    os.path.join(www_dir, 'basic-noglass-bl-02-1x1-square.small.png')
+    '/j/res/profiles/basic-noglass-bl-02-1x1-square.small.jpg',
+    os.path.join(www_dir, 'basic-noglass-bl-02-1x1-square.small.jpg')
   )
 
   with open(os.path.join(www_dir, 'style.css'), 'w') as fd:
@@ -258,7 +260,7 @@ h1#name {
     </style>
   </head>
   <body>
-    <img id="profile" src="basic-noglass-bl-02-1x1-square.small.png">
+    <img id="profile" src="basic-noglass-bl-02-1x1-square.small.jpg">
     <h1 id="name">Jeffrey McAteer</h1>
     <ul>
       <li><a href="code_projects.html">Code Projects</a></li>
