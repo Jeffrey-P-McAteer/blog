@@ -3,10 +3,17 @@
 # yay -S discount
 
 import os, sys, subprocess, shutil
+
 # python3 -m pip install --user python-dateutil
 from dateutil import parser
 import datetime
 import time
+
+# python3 -m pip install --user htmlmin
+import htmlmin
+
+def minify(content):
+  return htmlmin.minify(content, remove_comments=True, remove_empty_space=True);
 
 def markdown_to_html(article_index_html, article_index_md, style_path='../style.css'):
   subprocess.run([
@@ -31,7 +38,7 @@ def markdown_to_html(article_index_html, article_index_md, style_path='../style.
 """.strip() + article_index_html_content + "</body></html>"
 
   with open(article_index_html, 'w') as fd:
-    fd.write(article_index_html_content)
+    fd.write(minify(article_index_html_content))
 
 def main():
   www_dir = 'www'
@@ -116,7 +123,7 @@ def main():
             html += "</table>"
             html += "</body>"
 
-            fd.write(html)
+            fd.write(minify(html))
 
   # For each page create a tld file
   for p_file_name in os.listdir('pages'):
@@ -141,7 +148,7 @@ def main():
   )
 
   with open(os.path.join(www_dir, 'style.css'), 'w') as fd:
-    fd.write("""
+    fd.write(minify("""
 body {
   min-height: 60vh;
   margin:40px auto;
@@ -206,13 +213,13 @@ html, body {
 }
 
 /** 3rd party style/integration stuff (not relevant for all pages) */
-div#ace_editor {
+#ace_editor {
   min-width: 620px;
   min-height: 380px;
 }
 .ace_scrollbar { display: none !important; }
 
-""".strip()
+""".strip())
     )
 
   # Generate index...
@@ -257,6 +264,7 @@ h1#name {
       <li><a href="code_projects.html">Code Projects</a></li>
       <li><a href="music_i_enjoy.html">Music I Enjoy</a></li>
       <li><a href="anime_i_enjoy.html">Anime I Enjoy</a></li>
+      <li><a href="movies_i_enjoy.html">Movies I Enjoy</a></li>
       <!-- <li><a href="tracker.html">Tracker App</a></li> -->
     </ul>
     <h1 id="articles">Articles</h1>
@@ -273,7 +281,7 @@ h1#name {
 
     html += "</body></html> \n\n<!-- Congratulations you read a comment!-->\n\n "
 
-    fd.write(html)
+    fd.write(minify(html))
 
 
   # if "firefox" in args open FF

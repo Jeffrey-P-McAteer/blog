@@ -22,7 +22,7 @@ and because sqlite is simple and awesome I threw a python script together to nuk
 [clean_ff.py](clean_ff.py)
 
 
-<div id="ace_editor">#!/usr/bin/env python
+<pre id="ace_editor">#!/usr/bin/env python
 
 import os, sys, subprocess
 import sqlite3
@@ -76,7 +76,7 @@ delete from moz_cookies where creationTime < {oldest_nanoseconds};
   conn.commit()
   conn.close()
 
-</div>
+</pre>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js" type="text/javascript" charset="utf-8"></script>
 
