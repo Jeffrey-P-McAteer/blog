@@ -10,3 +10,6 @@
  - [dindex](https://github.com/Jeffrey-P-McAteer/dindex)
     - Totally incomplete, but the goal is a general-purpose index to improve the quality of search engines.
 
+ - [webd](https://github.com/Jeffrey-P-McAteer/webd)
+    - Another unfinished one, this will power p2p directory sharing with a focus on portability and ease of integration.
+
