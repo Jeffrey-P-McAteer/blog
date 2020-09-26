@@ -150,79 +150,8 @@ def main():
   )
 
   with open(os.path.join(www_dir, 'style.css'), 'w') as fd:
-    fd.write(minify("""
-body {
-  min-height: 60vh;
-  margin:40px auto;
-  max-width: 680px;
-  line-height: 1.6;
-  font-size: 18px;
-  
-  padding: 2pt 9pt;
-  padding-bottom: 300pt;
-  padding-bottom: 80vh;
-
-  text-align: left;
-  margin: 0 8pt;
-
-  border-radius: 3pt;
-}
-h1, h2, h3, p {
-  margin: 2pt 0;
-  line-height:1.2;
-}
-p {
-  margin: 16pt 0;
-  /* text-indent: 1em; TODO */
-}
-a:link { color: #268bd2; }
-a:visited { color: #2aa198; }
-a:hover { color: #209090; }
-a:active { color: #209090; }
-img {
-  max-width: 680px;
-}
-
-/** Not theme-specific, but corrections for browser defaults I dislike */
-
-html::-webkit-scrollbar, body::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
-}
-html, body {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-/** Theme-specific stuff, we repeat the light style for old devices which error on @media queries */
-
-html, body {
-  background: #fdf6e3;
-  color: #586e75;
-}
-
-@media (prefers-color-scheme: light) {
-  html, body {
-    background: #fdf6e3;
-    color: #586e75;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  html, body {
-    background: #002b36;
-    color: #586e75;
-  }
-}
-
-/** 3rd party style/integration stuff (not relevant for all pages) */
-#ace_editor {
-  min-width: 620px;
-  min-height: 380px;
-}
-.ace_scrollbar { display: none !important; }
-
-""".strip())
-    )
+    with open('style.css', 'r') as style_fd:
+      fd.write(minify(style_fd.read()))
 
   # Generate index...
   with open(os.path.join(www_dir, 'index.html'), 'w') as fd:
