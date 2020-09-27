@@ -45,6 +45,7 @@ In the (highly likely) event MyAnimeList isn't up to date, here's a more long-te
 - [The Saga of Tanya the Evil](https://myanimelist.net/anime/32615/Youjo_Senki/) (isekai)
 - [The Melancholy of Haruhi Suzumiya](https://myanimelist.net/anime/849/Suzumiya_Haruhi_no_Yuuutsu)
 - [Darwin's Game](https://myanimelist.net/anime/38656/Darwins_Game)
+- [Black Butler](https://en.wikipedia.org/wiki/Black_Butler)
 
 ### Seasonal stuff (lower than "reasonably good" but still above garbage; would not be excited about 2nd season but it's something I'd watch)
 
