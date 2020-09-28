@@ -21,6 +21,7 @@ In the (highly likely) event MyAnimeList isn't up to date, here's a more long-te
 - [Soul Eater](https://myanimelist.net/anime/3588/Soul_Eater) (madness + philosophy)
 - [Watamote](https://myanimelist.net/anime/16742/Watashi_ga_Motenai_no_wa_Dou_Kangaetemo_Omaera_ga_Warui)
 - [Ouran](https://en.wikipedia.org/wiki/Ouran_High_School_Host_Club)
+- [Kakegurui](https://en.wikipedia.org/wiki/Kakegurui_%E2%80%93_Compulsive_Gambler)
 
 ### The Funny Stuff
 
