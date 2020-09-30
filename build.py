@@ -51,6 +51,33 @@ def main():
 
   # Read in music, anime, etc...
 
+  # Read in all the comics...
+  www_dir_c = os.path.join(www_dir, 'c')
+  if not os.path.exists(www_dir_c):
+    os.makedirs(www_dir_c)
+
+  comic_names = []
+  for c_dir_name in os.listdir('comics'):
+    c_dir_path = os.path.join('comics', c_dir_name);
+    if os.path.isdir(c_dir_path) and len(c_dir_name) > 3:
+      print("Processing comic {} (//TODO finish me)".format(c_dir_name))
+
+      comic_src_f = os.path.join(c_dir_path, 'comic.xcf')
+      # Copy in to www/c/comic_name.jpg
+      comic_www_png = os.path.join(www_dir_c, c_dir_name)+'.png'
+      subprocess.run([
+        'xcf2png', '-f', comic_src_f, '-o', comic_www_png
+      ])
+      comic_www_jpg = os.path.join(www_dir_c, c_dir_name)+'.jpg'
+      subprocess.run([ 'convert',
+          comic_www_png,
+            '-strip', '-interlace', 'Plane', '-gaussian-blur', '0.05', '-quality', '85%',
+          comic_www_jpg
+      ])
+      subprocess.run(['rm', comic_www_png])
+
+
+
   # Read all the articles...
   article_names = []
   # map name -> article_date
