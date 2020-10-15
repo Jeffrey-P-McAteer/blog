@@ -18,7 +18,7 @@
  - [Home Alone](https://en.wikipedia.org/wiki/Home_Alone) (only the first 2 films)
  - [Stand and Deliver](https://en.wikipedia.org/wiki/Stand_and_Deliver)
  - [Alita: Battle Angel](https://en.wikipedia.org/wiki/Alita:_Battle_Angel)
-
+ - [The Sting](https://en.wikipedia.org/wiki/The_Sting)
 
 ## Stuff I'm a fan of...
 
