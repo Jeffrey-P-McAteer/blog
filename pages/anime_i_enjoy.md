@@ -49,11 +49,15 @@ In the (highly likely) event MyAnimeList isn't up to date, here's a more long-te
 - [The Melancholy of Haruhi Suzumiya](https://myanimelist.net/anime/849/Suzumiya_Haruhi_no_Yuuutsu)
 - [Darwin's Game](https://myanimelist.net/anime/38656/Darwins_Game)
 - [Black Butler](https://en.wikipedia.org/wiki/Black_Butler)
+- [Dagashi Kashi](https://en.wikipedia.org/wiki/Dagashi_Kashi)
 
 ### Seasonal stuff (lower than "reasonably good" but still above garbage; would not be excited about 2nd season but it's something I'd watch)
 
 - [Dr. Stone](https://myanimelist.net/anime/38691/Dr_Stone)
 - [Shokugeki no Souma](https://myanimelist.net/anime/28171/Shokugeki_no_Souma)
+- [Deadman Wonderland](https://en.wikipedia.org/wiki/Deadman_Wonderland)
+- [Hunter × Hunter](https://en.wikipedia.org/wiki/Hunter_%C3%97_Hunter)
+
 
 ### That which arguments are made of
 
