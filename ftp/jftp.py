@@ -10,9 +10,14 @@ import logging
 import time
 import os
 import sys
+from threading import Thread
+import signal
+import traceback
 
 # Everyone shares these files
 JFTP_FILES = '/opt/jftp/data/' if os.path.exists('/opt/jftp/data/') else '/tmp/'
+
+ftp_server_o = None
 
 class JAuth(object):
   """
@@ -81,11 +86,43 @@ class JFTPHandler(FTPHandler):
   #   self.push_dtp_data(producer, isproducer=True, cmd="LIST")
   #   return path
 
-h = JFTPHandler
-h.authorizer = JAuth()
-#h.masquerade_address = '10.142.0.7' # pulled from live VM
-h.passive_ports = list(range(9128, 65535))
+def ftp_svr_t():
+  global ftp_server_o
+  h = JFTPHandler
+  h.authorizer = JAuth()
+  #h.masquerade_address = '10.142.0.7' # pulled from live VM
+  h.passive_ports = list(range(9128, 65535))
 
-server = FTPServer(("0.0.0.0", 21), h)
-server.serve_forever()
+  ftp_server_o = FTPServer(("0.0.0.0", 21), h)
+  ftp_server_o.serve_forever(timeout=0.5)
 
+def http_svr_t():
+  pass
+
+def on_sigint(sig, frame):
+  try:
+    ftp_server_o.close_all()
+  except:
+    traceback.print_exc() 
+  print('Exiting...')
+  sys.exit(0)
+
+def main():
+  signal.signal(signal.SIGINT, on_sigint)
+  threads = []
+
+  threads.append(Thread(target=ftp_svr_t, args=() ))
+  threads.append(Thread(target=http_svr_t, args=() ))
+
+  for t in threads:
+    t.start()
+
+  for t in threads:
+    t.join()
+
+  print('Done!')
+
+
+
+if __name__ == '__main__':
+  main()
