@@ -1,0 +1,13 @@
+[Unit]
+Description=JFTP service
+
+[Service]
+WorkingDirectory=/opt/jftp
+Type=simple
+User=root
+Group=root
+ExecStart=/usr/bin/python jftp.py
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target
