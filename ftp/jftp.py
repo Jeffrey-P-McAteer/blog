@@ -6,6 +6,7 @@
 from pyftpdlib.handlers import FTPHandler, BufferedIteratorProducer
 from pyftpdlib.servers import FTPServer
 
+import logging
 import time
 import os
 
@@ -63,7 +64,12 @@ class JFTPHandler(FTPHandler):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
     self.authorizer = JAuth()
+    self.passive_ports = range(9128, 65535)
 
+  # def pre_process_command(self, line, cmd, arg):
+  #   print('pre_process_command({}, {}, {})'.format(line, cmd, arg))
+  #   super().pre_process_command(line, cmd, arg)
+    
   # def ftp_LIST(self, path):
   #   print('{} asked to see files in {}'.format(None, path))
 
@@ -75,8 +81,6 @@ class JFTPHandler(FTPHandler):
   #   producer = BufferedIteratorProducer(iterator)
   #   self.push_dtp_data(producer, isproducer=True, cmd="LIST")
   #   return path
-
-
 
 
 server = FTPServer(("0.0.0.0", 21), JFTPHandler)
