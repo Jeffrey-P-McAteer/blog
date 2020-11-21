@@ -9,6 +9,7 @@ from pyftpdlib.servers import FTPServer
 import logging
 import time
 import os
+import sys
 
 # Everyone shares these files
 JFTP_FILES = '/opt/jftp/data/' if os.path.exists('/opt/jftp/data/') else '/tmp/'
@@ -63,12 +64,10 @@ class JAuth(object):
 class JFTPHandler(FTPHandler):
   def __init__(self, *args, **kwargs):
     super().__init__(*args, **kwargs)
-    self.authorizer = JAuth()
-    self.passive_ports = range(9128, 65535)
-
-  # def pre_process_command(self, line, cmd, arg):
-  #   print('pre_process_command({}, {}, {})'.format(line, cmd, arg))
-  #   super().pre_process_command(line, cmd, arg)
+    
+  def pre_process_command(self, line, cmd, arg):
+    print('pre_process_command({}, {}, {})'.format(line, cmd, arg), file=sys.stderr)
+    super().pre_process_command(line, cmd, arg)
     
   # def ftp_LIST(self, path):
   #   print('{} asked to see files in {}'.format(None, path))
@@ -82,7 +81,11 @@ class JFTPHandler(FTPHandler):
   #   self.push_dtp_data(producer, isproducer=True, cmd="LIST")
   #   return path
 
+h = JFTPHandler
+h.authorizer = JAuth()
+#h.masquerade_address = '10.142.0.7' # pulled from live VM
+h.passive_ports = list(range(9128, 65535))
 
-server = FTPServer(("0.0.0.0", 21), JFTPHandler)
+server = FTPServer(("0.0.0.0", 21), h)
 server.serve_forever()
 

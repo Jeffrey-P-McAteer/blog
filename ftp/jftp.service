@@ -6,7 +6,7 @@ WorkingDirectory=/opt/jftp
 Type=simple
 User=root
 Group=root
-ExecStart=/usr/bin/python jftp.py
+ExecStart=/usr/bin/python3 jftp.py
 KillMode=process
 
 [Install]
