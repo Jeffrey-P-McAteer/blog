@@ -65,7 +65,7 @@ def main():
       comic_src_f = os.path.join(c_dir_path, 'comic.xcf')
       # Copy in to www/c/comic_name.jpg
       comic_www_png = os.path.join(www_dir_c, c_dir_name)+'.png'
-      subprocess.run([
+      subprocess.run([ # yay -S xcftools
         'xcf2png', '-f', comic_src_f, '-o', comic_www_png
       ])
       comic_www_jpg = os.path.join(www_dir_c, c_dir_name)+'.jpg'
@@ -167,12 +167,12 @@ def main():
   # Copy index asset files in
 
   shutil.copy(
-    '/j/res/profiles/background-design-code-01.jpg',
+    '/j/photos/profiles/background-design-code-01.jpg',
     os.path.join(www_dir, 'background-design-code-01.jpg')
   )
-  # convert /j/res/profiles/basic-noglass-bl-02-1x1-square.small.png -resize 320x320 /j/res/profiles/basic-noglass-bl-02-1x1-square.small.jpg
+  # convert /j/photos/profiles/basic-noglass-bl-02-1x1-square.small.png -resize 320x320 /j/photos/profiles/basic-noglass-bl-02-1x1-square.small.jpg
   shutil.copy(
-    '/j/res/profiles/basic-noglass-bl-02-1x1-square.small.jpg',
+    '/j/photos/profiles/basic-noglass-bl-02-1x1-square.small.jpg',
     os.path.join(www_dir, 'basic-noglass-bl-02-1x1-square.small.jpg')
   )
 
