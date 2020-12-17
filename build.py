@@ -180,6 +180,10 @@ def main():
     with open('style.css', 'r') as style_fd:
       fd.write(minify(style_fd.read()))
 
+  with open(os.path.join(www_dir, 'jeff.asc'), 'w') as fd:
+    with open('jeff.asc', 'r') as jeff_fd:
+      fd.write(jeff_fd.read())
+
   # Generate index...
   with open(os.path.join(www_dir, 'index.html'), 'w') as fd:
     html = """
