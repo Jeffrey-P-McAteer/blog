@@ -227,6 +227,7 @@ h1#name {
       <li><a href="music_i_enjoy.html">Music I Enjoy</a></li>
       <li><a href="anime_i_enjoy.html">Anime I Enjoy</a></li>
       <li><a href="movies_i_enjoy.html">Movies I Enjoy</a></li>
+      <li><a href="links.html">Misc. Links</a></li>
       <!-- <li><a href="tracker.html">Tracker App</a></li> -->
     </ul>
     <h1 id="articles">Articles</h1>
