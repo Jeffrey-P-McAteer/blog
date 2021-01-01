@@ -8,9 +8,4 @@ Friends complain that buying me presents is impossible because
  - My music taste is absurd
  - 
 
-Many friends have complained that I'm a difficult person
-to buy gifts for; mostly because I buy my own tools and
-there isn't much besides tools that I like (possibly food).
-
-
-
+This document is the result 
