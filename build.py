@@ -3,14 +3,34 @@
 # yay -S discount
 
 import os, sys, subprocess, shutil
+import pip
+
+pyenv_f = os.path.join(os.path.dirname(__file__), '.pyenv')
+os.makedirs(pyenv_f, exist_ok=True)
+sys.path.append(pyenv_f)
 
 # python3 -m pip install --user python-dateutil
-from dateutil import parser
+try:
+  from dateutil import parser
+except:
+  pip.main(['install', f'--target={pyenv_f}', 'python-dateutil'])
+  from dateutil import parser
 import datetime
 import time
 
 # python3 -m pip install --user htmlmin
-import htmlmin
+try:
+  import htmlmin
+except:
+  pip.main(['install', f'--target={pyenv_f}', 'htmlmin'])
+  import htmlmin
+
+if not shutil.which('markdown'):
+  subprocess.run('yay -S discount'.split())
+
+if not shutil.which('rclone'):
+  subprocess.run('yay -S rclone'.split())
+
 
 def minify(content):
   return htmlmin.minify(content, remove_comments=True, remove_empty_space=True);
@@ -86,6 +106,11 @@ def main():
   for a_dir_name in os.listdir('articles'):
     a_dir_path = os.path.join('articles', a_dir_name);
     if os.path.isdir(a_dir_path) and len(a_dir_name) > 3:
+
+      ignore_file = os.path.join(a_dir_path, 'ignore.txt');
+      if os.path.exists(ignore_file):
+        print('Ignoring {} because ignore.txt exists...'.format(a_dir_name))
+        continue
       
       print("Processing article {}".format(a_dir_name))
 
@@ -167,12 +192,12 @@ def main():
   # Copy index asset files in
 
   shutil.copy(
-    '/j/photos/profiles/background-design-code-01.jpg',
+    'resources/background-design-code-01.jpg',
     os.path.join(www_dir, 'background-design-code-01.jpg')
   )
   # convert /j/photos/profiles/basic-noglass-bl-02-1x1-square.small.png -resize 320x320 /j/photos/profiles/basic-noglass-bl-02-1x1-square.small.jpg
   shutil.copy(
-    '/j/photos/profiles/basic-noglass-bl-02-1x1-square.small.jpg',
+    'resources/basic-noglass-bl-02-1x1-square.small.jpg',
     os.path.join(www_dir, 'basic-noglass-bl-02-1x1-square.small.jpg')
   )
 
