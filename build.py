@@ -309,8 +309,11 @@ h1#name {
 
     # Push to 'loci' / /usr/share/nginx/html
     subprocess.run(['sh', '-c', f'''
+
 rsync -avh "{www_dir}"/. loci:/usr/share/nginx/html --delete
-ssh loci sh -c "chown -r nobody:nobody /usr/share/nginx/html"
+
+ssh loci chown -R nobody:nobody /usr/share/nginx/html
+
 '''.strip()])
 
 
