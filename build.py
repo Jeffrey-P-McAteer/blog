@@ -312,7 +312,7 @@ h1#name {
 
 rsync -avh "{www_dir}"/. loci:/usr/share/nginx/html --delete
 
-ssh loci chown -R nobody:nobody /usr/share/nginx/html
+ssh loci chown -R http:http /usr/share/nginx/html
 
 '''.strip()])
 
