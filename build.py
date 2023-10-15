@@ -290,7 +290,7 @@ h1#name {
 
   # if "push" in args send it to a google storage bucket
   if 'push' in sys.argv:
-    rclone_storage = "blog-jmcateer-pw"
+    #rclone_storage = "blog-jmcateer-pw"
     # [blog-jmcateer-pw]
     # type = google cloud storage
     # project_number = blog-1586293022512
@@ -300,12 +300,19 @@ h1#name {
     # bucket_policy_only = true
     # location = us-east4
     # storage_class = REGIONAL
-    subprocess.run([
-      'rclone', 'copy',
-        '--update', '--verbose', '--transfers', '30', '--checkers', '8', '--contimeout', '60s',
-        '--timeout', '300s', '--retries', '3', '--low-level-retries', '10', '--stats', '1s',
-        www_dir, rclone_storage+':blog.jmcateer.pw/'
-    ])
+    #subprocess.run([
+    #  'rclone', 'copy',
+    #    '--update', '--verbose', '--transfers', '30', '--checkers', '8', '--contimeout', '60s',
+    #    '--timeout', '300s', '--retries', '3', '--low-level-retries', '10', '--stats', '1s',
+    #    www_dir, rclone_storage+':blog.jmcateer.pw/'
+    #])
+
+    # Push to 'loci' / /usr/share/nginx/html
+    subprocess.run(['sh', '-c', f'''
+rsync -avh "{www_dir}"/. loci:/usr/share/nginx/html --delete
+ssh loci sh -c "chown -r nobody:nobody /usr/share/nginx/html"
+'''.strip()])
+
 
 
 
